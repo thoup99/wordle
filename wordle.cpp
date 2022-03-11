@@ -75,7 +75,7 @@ int main() {
                 continue;
             }
 
-            int appeared;
+            int appeared = 0;
             for (int j = 0; j <= 4; j++)
             {
                 if (word.at(j) == letter)
@@ -83,6 +83,7 @@ int main() {
                     appeared++;
                 }
             }
+            
 
             //letter does not appear at all
             if (appeared == 0) 
@@ -92,18 +93,25 @@ int main() {
             }
 
             //Letter is in the word just the wrong spot
-            else if(true)
+            else
             {
                 c.printColor(letter, "yellow");
             }
+        
         }
         std::cout << "" <<std::endl;
         c.setColor("white");
         if (word == guess)
         {
             std::cout << "You guessed the word correct in " << attempt << " tries!";
+            isRight = true;
             break;
         }
     }
-
+    if (!isRight)
+    {
+        c.setColor("white");
+        std::cout << "You did not guess the word properly. It was " << word << "." << std::endl;
+    }
+    
 }
