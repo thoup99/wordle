@@ -8,7 +8,6 @@ class Console
     private:
         HANDLE ha = GetStdHandle(STD_OUTPUT_HANDLE);
     public:
-        enum colors{};
         void printColor();
         void changeColor();
         
@@ -41,7 +40,7 @@ int main() {
     Console c = Console();
     std::fstream myFile;
 
-    std::string word = "abbey";
+    std::string word = "words";
     myFile.open("answer.txt", std::ios::out);
     if (myFile.is_open())
     {
@@ -127,5 +126,5 @@ int main() {
         c.setColor("white");
         std::cout << "You did not guess the word properly. It was " << word << "." << std::endl;
     }
-    
+    std::cin.get();
 }
