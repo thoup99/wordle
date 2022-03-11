@@ -76,11 +76,17 @@ int main() {
             }
 
             int appeared = 0;
+            int appearedCorrect = 0;
             for (int j = 0; j <= 4; j++)
             {
                 if (word.at(j) == letter)
                 {
                     appeared++;
+                    
+                }
+                if (word.at(j) == guess.at(j))
+                {
+                    appearedCorrect++;
                 }
             }
             
@@ -91,6 +97,7 @@ int main() {
                 c.printColor(letter, "grey");
                 continue;
             }
+
 
             //Letter is in the word just the wrong spot
             else
