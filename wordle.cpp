@@ -41,7 +41,7 @@ int main() {
     Console c = Console();
     std::fstream myFile;
 
-    std::string word = "santa";
+    std::string word = "abbey";
     myFile.open("answer.txt", std::ios::out);
     if (myFile.is_open())
     {
@@ -52,12 +52,12 @@ int main() {
     int attempt = 1;
     boolean isRight = false;
 
-    std::cout << "Welcome to Wordle this is a secret message from Owen :D" << std::endl;
+    std::cout << "Welcome to Wordle" << std::endl;
     for (int attempt = 1; attempt <= 5; attempt++)
     {
         //Gets the Users guess
         std::string guess;
-        std::cout << "Attempt " << attempt << ". Please enter a 5 letter word.";
+        std::cout << "Attempt " << attempt << ". Please enter a 5 letter word.\n";
         std::cin >> guess;
         while (guess.length() != 5)
         {
@@ -77,14 +77,14 @@ int main() {
 
             int appeared = 0;
             int appearedCorrect = 0;
+
             for (int j = 0; j <= 4; j++)
             {
                 if (word.at(j) == letter)
                 {
-                    appeared++;
-                    
+                    appeared++;                    
                 }
-                if (word.at(j) == guess.at(j))
+                if (word.at(j) == guess.at(j) and guess.at(j) == letter)
                 {
                     appearedCorrect++;
                 }
@@ -95,14 +95,21 @@ int main() {
             if (appeared == 0) 
             {
                 c.printColor(letter, "grey");
-                continue;
             }
 
 
             //Letter is in the word just the wrong spot
             else
             {
-                c.printColor(letter, "yellow");
+                if (appearedCorrect < appeared)
+                {
+                    c.printColor(letter, "yellow");   
+                }
+                else
+                {
+                    c.printColor(letter, "grey");
+                }
+                //std::cout << appeared << " " <<appearedCorrect << " " << appearedInGuess << std::endl;
             }
         
         }
