@@ -157,30 +157,31 @@ int main() {
                     continue;
                 }
 
-                int appeared = 0;
-                int appearedCorrect = 0;
+                int timesInWord = 0;
+                int correctInWord = 0;
+                int timesInGuess = 0;
 
                 for (int j = 0; j <= 4; j++)
                 {
                     if (word.at(j) == letter)
                     {
-                        appeared++;                    
+                        timesInWord++;                    
                     }
                     if (word.at(j) == guess.at(j) and guess.at(j) == letter)
                     {
-                        appearedCorrect++;
+                        correctInWord++;
                     }
                 }
 
 
                 //letter does not appear at all
-                if (appeared == 0) 
+                if (timesInWord == 0) 
                 {
                     console.printColor(letter, "grey");
                 }
                 
                 //Letter is in the word just the wrong spot
-                else if (appearedCorrect < appeared)
+                else if (correctInWord < timesInWord)
                 {
                     console.printColor(letter, "yellow");   
                 }
