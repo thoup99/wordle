@@ -100,129 +100,128 @@ int main() {
     boolean playAgain;
     do
     {
-        
+
         //Picks a random word from the word list
-    srand(time(0));
-    int randIndex = rand() % 2315 + 1;
-    std::string word = word_list[randIndex];
+        srand(time(0));
+        int randIndex = rand() % 2315 + 1;
+        std::string word = word_list[randIndex];
 
-    //Writes the current word to a file
-    myFile.open("answer.txt", std::ios::out);
-    if (myFile.is_open())
-    {
-        myFile << word;
-        myFile.close();
-    }
-
-    int attempt = 1;
-    boolean isRight = false;
-
-    std::cout << "Welcome to Wordle" << std::endl;
-    for (int attempt = 1; attempt <= 5; attempt++)
-    {
-        //Gets the Users guess
-        boolean isValidGuess = false;
-        std::string guess;
-
-        std::cout << "Attempt " << attempt << ". ";
-        while (!isValidGuess)
+        //Writes the current word to a file
+        myFile.open("answer.txt", std::ios::out);
+        if (myFile.is_open())
         {
-            
-            while (guess.length() != 5)
-            {
-                std::cout << "Please enter a 5 letter word." << std::endl;
-                std::cin >> guess;
-            }
-            if (!(binarySearch(word_list, 0, 2314, guess) or binarySearch(allowed_list, 0, 10656, guess)))
-            {
-                std::cout << "That word is not in the word list. ";
-                guess = "";
-                continue;
-            }
-            isValidGuess = true;
+            myFile << word;
+            myFile.close();
         }
-        
 
-        //Goes back one line in the terminal and then backspaces 5 times.
-        std::cout << "\033[F" << "\b\b\b\b\b";
-        
-        //Checks each letter of the guess
-        for (int i = 0; i <= 4; i++){
-            char letter = std::tolower(guess.at(i));
-            guess.at(i) = letter; //coverts the guess to lower case
+        int attempt = 1;
+        boolean isRight = false;
 
-            //Letter is in the correct spot
-            if (word.at(i) == letter){
-                console.printColor(letter, "green");
-                continue;
-            }
+        std::cout << "Welcome to Wordle" << std::endl;
+        for (int attempt = 1; attempt <= 5; attempt++)
+        {
+            //Gets the Users guess
+            boolean isValidGuess = false;
+            std::string guess;
 
-            int appeared = 0;
-            int appearedCorrect = 0;
-
-            for (int j = 0; j <= 4; j++)
+            std::cout << "Attempt " << attempt << ". ";
+            while (!isValidGuess)
             {
-                if (word.at(j) == letter)
+
+                while (guess.length() != 5)
                 {
-                    appeared++;                    
+                    std::cout << "Please enter a 5 letter word." << std::endl;
+                    std::cin >> guess;
                 }
-                if (word.at(j) == guess.at(j) and guess.at(j) == letter)
+                if (!(binarySearch(word_list, 0, 2314, guess) or binarySearch(allowed_list, 0, 10656, guess)))
                 {
-                    appearedCorrect++;
+                    std::cout << "That word is not in the word list. ";
+                    guess = "";
+                    continue;
                 }
-            }
-            
-
-            //letter does not appear at all
-            if (appeared == 0) 
-            {
-                console.printColor(letter, "grey");
+                isValidGuess = true;
             }
 
 
-            //Letter is in the word just the wrong spot
-            else
-            {
-                if (appearedCorrect < appeared)
+            //Goes back one line in the terminal and then backspaces 5 times.
+            std::cout << "\033[F" << "\b\b\b\b\b";
+
+            //Checks each letter of the guess
+            for (int i = 0; i <= 4; i++){
+                char letter = std::tolower(guess.at(i));
+                guess.at(i) = letter; //coverts the guess to lower case
+
+                //Letter is in the correct spot
+                if (word.at(i) == letter){
+                    console.printColor(letter, "green");
+                    continue;
+                }
+
+                int appeared = 0;
+                int appearedCorrect = 0;
+
+                for (int j = 0; j <= 4; j++)
+                {
+                    if (word.at(j) == letter)
+                    {
+                        appeared++;                    
+                    }
+                    if (word.at(j) == guess.at(j) and guess.at(j) == letter)
+                    {
+                        appearedCorrect++;
+                    }
+                }
+
+
+                //letter does not appear at all
+                if (appeared == 0) 
+                {
+                    console.printColor(letter, "grey");
+                }
+                
+                //Letter is in the word just the wrong spot
+                else if (appearedCorrect < appeared)
                 {
                     console.printColor(letter, "yellow");   
                 }
+                
+                //Letter is not in the word at all
                 else
                 {
                     console.printColor(letter, "grey");
                 }
-            }
-        
-        }
-        std::cout << "" <<std::endl;
-        console.setColor("white");
-        if (word == guess)
-        {
-            std::cout << "You guessed the word correct in " << attempt << " tries!" << std::endl;
-            isRight = true;
-            break;
-        }
-    }
-    if (!isRight)
-    {
-        console.setColor("white");
-        std::cout << "You did not guess the word properly. It was " << word << "." << std::endl;
-    }
+                
 
-        //Checks if the user wants to play again
-        std::string response;        
-        while (!(response == "y" or response == "n"))
-        {
-            std::cout << "Would you like to play again? (y/n)" << std::endl;
-            std::cin >> response;
+            }
+            std::cout << "" <<std::endl;
+            console.setColor("white");
+            if (word == guess)
+            {
+                std::cout << "You guessed the word correct in " << attempt << " tries!" << std::endl;
+                isRight = true;
+                break;
+            }
         }
-        if (response == "y")
+        if (!isRight)
         {
-            playAgain = true;
+            console.setColor("white");
+            std::cout << "You did not guess the word properly. It was " << word << "." << std::endl;
         }
-        else
-        {
-            playAgain = false;
-        }
+
+            //Checks if the user wants to play again
+            std::string response;        
+            while (!(response == "y" or response == "n"))
+            {
+                std::cout << "Would you like to play again? (y/n)" << std::endl;
+                std::cin >> response;
+            }
+            if (response == "y")
+            {
+                playAgain = true;
+            }
+            else
+            {
+                playAgain = false;
+            }
     } while (playAgain);
 }
