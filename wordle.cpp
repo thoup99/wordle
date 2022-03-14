@@ -208,20 +208,20 @@ int main() {
             std::cout << "You did not guess the word properly. It was " << word << "." << std::endl;
         }
 
-            //Checks if the user wants to play again
-            std::string response;        
-            while (!(response == "y" or response == "n"))
-            {
-                std::cout << "Would you like to play again? (y/n)" << std::endl;
-                std::cin >> response;
-            }
-            if (response == "y")
-            {
-                playAgain = true;
-            }
-            else
-            {
-                playAgain = false;
-            }
+        //Checks if the user wants to play again
+        std::string response;        
+        while (!(response == "y" or response == "n"))
+        {
+            std::cout << "Would you like to play again? (y/n)" << std::endl;
+            std::cin >> response;
+        }
+        if (response == "y")
+        {
+            playAgain = true;
+        }
+        else
+        {
+            playAgain = false;
+        }
     } while (playAgain);
 }
