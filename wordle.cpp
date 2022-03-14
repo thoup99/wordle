@@ -97,7 +97,11 @@ int main() {
         myFile.close();
     }
 
-    //Picks a random word from the word list
+    boolean playAgain;
+    do
+    {
+        
+        //Picks a random word from the word list
     srand(time(0));
     int randIndex = rand() % 2315 + 1;
     std::string word = word_list[randIndex];
@@ -204,7 +208,21 @@ int main() {
         console.setColor("white");
         std::cout << "You did not guess the word properly. It was " << word << "." << std::endl;
     }
-    std::string end;
-    std::cout << "Type and press enter to close." << std::endl;
-    std::cin >> end;
+
+        //Checks if the user wants to play again
+        std::string response;        
+        while (!(response == "y" or response == "n"))
+        {
+            std::cout << "Would you like to play again? (y/n)" << std::endl;
+            std::cin >> response;
+        }
+        if (response == "y")
+        {
+            playAgain = true;
+        }
+        else
+        {
+            playAgain = false;
+        }
+    } while (playAgain);
 }
