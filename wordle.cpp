@@ -19,7 +19,7 @@ class Console
         setColor(colorName);
         std::cout << letter;
     }
-
+    
     void setColor(std::string colorName)
     {
         if (colorName == "white")
@@ -35,6 +35,73 @@ class Console
             std::cout << "Error. Color not Found. Name " << colorName;
         }
     }
+};
+
+class LetterBank
+{
+    /*Word Bank
+        Values Keys                
+            0 - Grey
+            1 - White
+            2 - Yellow
+            3 - Green
+        /**/
+    private:
+        std::string letters;
+        int values[26];
+        Console console;
+    public:
+        LetterBank(Console c)
+        {
+            console = c;
+            resetValues();
+            letters = "abcdefghijklmnopqrstuvwxyz";
+        }
+
+        void resetValues()
+        { 
+            for (int i = 0; i < 26; i++)
+            {
+                values[i] = 1;
+            } 
+        }  
+
+        void setValue(char letter, int newValue)
+        {
+            int index = letters.find(letter);
+            values[index] = newValue;
+        }
+
+        int getValue(char letter)
+        {
+            int index = letters.find(letter);
+            return values[index];
+        }
+
+        void printValues()
+        {
+            for (int i = 0; i < 26; i++)
+            {
+                if (values[i] == 0)
+                {
+                    console.printColor(letters.at(i), "grey");
+                }
+                else if (values[i] == 1)
+                {
+                    console.printColor(letters.at(i), "white");
+                }
+                else if (values[i] == 2)
+                {
+                    console.printColor(letters.at(i), "yellow");
+                }
+                else
+                {
+                    console.printColor(letters.at(i), "green");
+                }
+            } 
+            std::cout << std::endl;
+            console.setColor("white");
+        }
 };
 
 boolean binarySearch(std::string arr[], int start, int end, std::string value){
@@ -65,6 +132,7 @@ boolean binarySearch(std::string arr[], int start, int end, std::string value){
 
 int main() {
     Console console = Console();
+    LetterBank letterBank = LetterBank(console);
     std::fstream myFile;
 
     //Load word list
@@ -81,7 +149,8 @@ int main() {
         }
         myFile.close();
     }
-
+    
+                
     //load allowed list
     std::string allowed_list[10657];
     myFile.open("allowed_list.txt", std::ios::in);
@@ -103,7 +172,7 @@ int main() {
 
         //Picks a random word from the word list
         srand(time(0));
-        int randIndex = rand() % 2315 + 1;
+        int randIndex = rand() % 2314 + 1;
         std::string word = word_list[randIndex];
 
         //Writes the current word to a file
@@ -114,11 +183,13 @@ int main() {
             myFile.close();
         }
 
+        letterBank.resetValues();
+
         int attempt = 1;
         boolean isRight = false;
 
         std::cout << "Welcome to Wordle" << std::endl;
-        for (int attempt = 1; attempt <= 5; attempt++)
+        for (int attempt = 1; attempt <= 6; attempt++)
         {
             //Gets the Users guess
             boolean isValidGuess = false;
@@ -130,7 +201,8 @@ int main() {
 
                 while (guess.length() != 5)
                 {
-                    std::cout << "Please enter a 5 letter word." << std::endl;
+                    std::cout << "Please enter a 5 letter word.\t";
+                    letterBank.printValues();
                     std::cin >> guess;
                 }
                 if (!(binarySearch(word_list, 0, 2314, guess) or binarySearch(allowed_list, 0, 10656, guess)))
@@ -141,7 +213,6 @@ int main() {
                 }
                 isValidGuess = true;
             }
-
 
             //Goes back one line in the terminal and then backspaces 5 times.
             std::cout << "\033[F" << "\b\b\b\b\b";
@@ -154,23 +225,24 @@ int main() {
                 //Letter is in the correct spot
                 if (word.at(i) == letter){
                     console.printColor(letter, "green");
+                    letterBank.setValue(letter, 4);
                     continue;
                 }
 
                 int timesInWord = 0;
                 int correctInWord = 0;
-                int timesInGuess = 0;
 
                 for (int j = 0; j <= 4; j++)
                 {
                     if (word.at(j) == letter)
                     {
-                        timesInWord++;                    
-                    }
-                    if (word.at(j) == guess.at(j) and guess.at(j) == letter)
-                    {
-                        correctInWord++;
-                    }
+                        timesInWord++;   
+
+                        if (guess.at(j) == letter)
+                        {
+                            correctInWord++;
+                        }       
+                    }                                            
                 }
 
 
@@ -178,15 +250,20 @@ int main() {
                 if (timesInWord == 0) 
                 {
                     console.printColor(letter, "grey");
+                    letterBank.setValue(letter, 0);
                 }
                 
                 //Letter is in the word just the wrong spot
                 else if (correctInWord < timesInWord)
                 {
-                    console.printColor(letter, "yellow");   
+                    console.printColor(letter, "yellow");
+                    if (letterBank.getValue(letter) == 1)
+                    {
+                        letterBank.setValue(letter, 2);
+                    }       
                 }
-                
-                //Letter is not in the word at all
+
+                //Letter was in guess more than it was in the word
                 else
                 {
                     console.printColor(letter, "grey");
