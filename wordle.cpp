@@ -183,6 +183,7 @@ int main() {
             myFile.close();
         }
 
+        word = "pupil";
         letterBank.resetValues();
 
         int attempt = 1;
@@ -230,21 +231,24 @@ int main() {
                 }
 
                 int timesInWord = 0;
-                int correctInWord = 0;
+                int timesLetterCorrect = 0;
+                int timesInGuessBefore = 0;
 
                 for (int j = 0; j <= 4; j++)
                 {
                     if (word.at(j) == letter)
                     {
-                        timesInWord++;   
-
-                        if (guess.at(j) == letter)
-                        {
-                            correctInWord++;
-                        }       
-                    }                                            
+                        timesInWord++;
+                    }
+                    if (word.at(j) == guess.at(j) and guess.at(j) == letter)
+                    {
+                        timesLetterCorrect++;
+                    }   
+                    if (guess.at(j) == letter and j <= i)
+                    {
+                        timesInGuessBefore++;
+                    }                                      
                 }
-
 
                 //letter does not appear at all
                 if (timesInWord == 0) 
@@ -254,22 +258,22 @@ int main() {
                 }
                 
                 //Letter is in the word just the wrong spot
-                else if (correctInWord < timesInWord)
-                {
-                    console.printColor(letter, "yellow");
-                    if (letterBank.getValue(letter) == 1)
-                    {
-                        letterBank.setValue(letter, 2);
-                    }       
-                }
-
-                //Letter was in guess more than it was in the word
                 else
                 {
-                    console.printColor(letter, "grey");
+                    int yellowsNeeded = 1 + timesInWord - timesLetterCorrect - timesInGuessBefore;
+                    if(yellowsNeeded > 0)
+                    {
+                        console.printColor(letter, "yellow");
+                        if (letterBank.getValue(letter) == 1)
+                        {
+                            letterBank.setValue(letter, 2);
+                        }
+                    }                     
+                    else
+                    {
+                        console.printColor(letter, "grey");
+                    }      
                 }
-                
-
             }
             std::cout << "" <<std::endl;
             console.setColor("white");
