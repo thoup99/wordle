@@ -39,13 +39,6 @@ class Console
 
 class LetterBank
 {
-    /*Word Bank
-        Values Keys                
-            0 - Grey
-            1 - White
-            2 - Yellow
-            3 - Green
-        /**/
     private:
         std::string letters;
         int values[26];
@@ -183,7 +176,6 @@ int main() {
             myFile.close();
         }
 
-        word = "pupil";
         letterBank.resetValues();
 
         int attempt = 1;
@@ -206,6 +198,14 @@ int main() {
                     letterBank.printValues();
                     std::cin >> guess;
                 }
+
+                //Converts to lower case
+                for (int i = 0; i < 5; i++)
+                {
+                    guess.at(i) = std::tolower(guess.at(i));
+                }
+
+                //Checks to see if the word entered is in the word lists
                 if (!(binarySearch(word_list, 0, 2314, guess) or binarySearch(allowed_list, 0, 10656, guess)))
                 {
                     std::cout << "That word is not in the word list. ";
@@ -220,8 +220,7 @@ int main() {
 
             //Checks each letter of the guess
             for (int i = 0; i <= 4; i++){
-                char letter = std::tolower(guess.at(i));
-                guess.at(i) = letter; //coverts the guess to lower case
+                char letter = guess.at(i);
 
                 //Letter is in the correct spot
                 if (word.at(i) == letter){
@@ -239,11 +238,11 @@ int main() {
                     if (word.at(j) == letter)
                     {
                         timesInWord++;
-                    }
-                    if (word.at(j) == guess.at(j) and guess.at(j) == letter)
-                    {
-                        timesLetterCorrect++;
-                    }   
+                        if (word.at(j) == guess.at(j))
+                        {
+                            timesLetterCorrect++;
+                        }  
+                    }                     
                     if (guess.at(j) == letter and j <= i)
                     {
                         timesInGuessBefore++;
